@@ -38,8 +38,8 @@
 #endif
 
 // -fassume-nonnull flag
-LANGOPT(Freestanding,     , 1, 0, "Freestanding implementation")
-LANGOPT(AssumeNonnull     , 1, 0, "Assume pointers are nonnull by default in user code")
+LANGOPT(Freestanding,     , 1, 0, NotCompatible, "Freestanding implementation")
+LANGOPT(AssumeNonnull , 1, 0, NotCompatible, "Assume pointers are nonnull by default in user code")
 
 // FIXME: A lot of the Benign options should be Compatible instead.
 LANGOPT(C99               , 1, 0, NotCompatible, "C99")
