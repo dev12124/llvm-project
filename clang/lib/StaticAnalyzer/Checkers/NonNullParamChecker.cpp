@@ -125,6 +125,13 @@ void NonNullParamChecker::checkPreCall(const CallEvent &Call,
     bool HasRefTypeParam =
         HasParam ? parms[idx]->getType()->isReferenceType() : false;
     bool ExpectedToBeNonNull = AttrNonNull.test(idx);
+    // If is actived flag -fassume-nonnull and param position of idx has/haves/have
+    if (C.getASTContext().getLangOpts().AssumeNonnull == true && HasParam) {
+      if (!C.getSourceManager().isInSystemHeader(Call.getDecl()->getLocation()) && 
+      parms[idx]->getType()->isAnyPointerType()) {
+        ExpectedToBeNonNull = true;
+      }
+    }
 
     if (!ExpectedToBeNonNull && !HasRefTypeParam)
       continue;

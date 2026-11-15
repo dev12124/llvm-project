@@ -58,6 +58,41 @@ enum TypeDiagSelector {
   TDS_ObjCObjOrBlock
 };
 
+
+
+/*--------------------------------------------------------------------------------------
+ *      Uses -fassume-nonnull for active this function
+ *      Sorry for 'style VGA years 90', I'm contamined by Linux 0.01 version. 
+----------------------------------------------------------------------------------------*/
+static bool 
+shouldAssumeNonNull (
+          Sema &S , 
+          SourceLocation Loc
+  ) {
+
+    if(Loc.isInvalid ())
+      return false ;
+
+
+    // 1. If #pragma clang assume_nonnull actived in @param Loc
+    if( S.PP.getPragmaAssumeNonNullLoc ().isValid () ){
+      return true ;
+    }
+    // 2. If -fassume-nonnull actived/desactived 
+    if( S.getLangOpts ().AssumeNonnull == false ){
+      return false ;
+    }else{
+       if( S.getSourceManager ().isInSystemHeader (Loc) ){
+        return false ;
+       }
+       // Analysis if parameters is null
+
+    }
+
+    return true ;
+}
+
+
 /// isOmittedBlockReturnType - Return true if this declarator is missing a
 /// return type because this is a omitted return type on a block literal.
 static bool isOmittedBlockReturnType(const Declarator &D) {
@@ -4479,6 +4514,8 @@ static TypeSourceInfo *GetFullTypeForDeclarator(TypeProcessingState &state,
   if (assumeNonNullLoc.isValid()) {
     inAssumeNonNullRegion = true;
     recordNullabilitySeen(S, assumeNonNullLoc);
+  } else if (shouldAssumeNonNull(S, D.getBeginLoc()) == true) {
+      inAssumeNonNullRegion = true;
   }
 
   // Whether to complain about missing nullability specifiers or not.

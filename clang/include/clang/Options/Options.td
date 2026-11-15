@@ -3277,6 +3277,16 @@ def ffreestanding : Flag<["-"], "ffreestanding">, Group<f_Group>,
   Visibility<[ClangOption, CC1Option]>,
   HelpText<"Assert that the compilation takes place in a freestanding environment">,
   MarshallingInfoFlag<LangOpts<"Freestanding">>;
+
+// --- -fassume-nonnull flag ---
+
+def fassume_nonnull : Flag<["-"], "fassume-nonnull">, Group<f_Group>,
+  Visibility<[ClangOption, CC1Option]>,
+  HelpText<"Assume pointers are nonnull by default in user headers and files">,
+  MarshallingInfoFlag<LangOpts<"AssumeNonnull">>;
+
+// --- -fassume-nonnull flag ---
+
 def fgnuc_version_EQ : Joined<["-"], "fgnuc-version=">, Group<f_Group>,
   HelpText<"Sets various macros to claim compatibility with the given GCC version (default is 4.2.1)">,
   Visibility<[ClangOption, CC1Option, CLOption]>;
